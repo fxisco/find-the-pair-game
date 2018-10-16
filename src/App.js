@@ -20,13 +20,20 @@ class App extends Component {
     const MAX = ICONS.length;
     const qty = MIN_ELEMENTS + level * 2;
     const qtyPerLevel = qty > MAX ? MAX : qty;
-    console.log(Math.floor((Math.random() * qtyPerLevel)));
+    const copy = [...ICONS];
+
+    const iconsToShow = [...Array(qtyPerLevel)].map(() => {
+      const index = Math.floor((Math.random() * copy.length));
+      const item = copy.splice(index, 1);
+
+      return item[0];
+    });
 
     return (
       <div className="App">
         <div className="container">
           <div className="row">
-          {ICONS.map((item) => {
+          {iconsToShow.map((item) => {
             return (
               <div key={`card-${item}`} className="col-sm-1 py-3">
                 <div className="card">
