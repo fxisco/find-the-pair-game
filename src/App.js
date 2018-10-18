@@ -38,6 +38,38 @@ class App extends Component {
         paired: {}
       });
     }
+
+    if (Object.keys(this.state.selected).length === SELECTED_ITEMS_MAX) {
+      const matchingPairs = Object.keys(this.state.selected).reduce((accum, key) => {
+        const icon = key.split('_')[0];
+
+        if (!accum[icon]) {
+          accum[icon] = icon;
+        }
+
+        return accum;
+      }, {});
+
+      if (Object.keys(matchingPairs).length > 1) {
+        setTimeout(() => {
+          this.setState({
+            ...this.state,
+            selected: {}
+          });
+        }, FLIP_TIMEOUT);
+      } else {
+        setTimeout(() => {
+          this.setState({
+            ...this.state,
+            selected: {},
+            paired: {
+              ...this.state.paired,
+              ...this.state.selected
+            }
+          });
+        }, FLIP_TIMEOUT);
+      }
+    }
   }
 
   setGameLevel() {
@@ -70,44 +102,12 @@ class App extends Component {
   handleCardSelection(id) {
     const { selected } = this.state;
 
-    if (!selected[id]) {
+    if (!selected[id] && Object.keys(this.state.selected).length < SELECTED_ITEMS_MAX) {
       this.setState({
         ...this.state,
         selected: {
           ...selected,
           [id]: id
-        }
-      }, () => {
-        if (Object.keys(this.state.selected).length === SELECTED_ITEMS_MAX) {
-          const matchingPairs = Object.keys(this.state.selected).reduce((accum, key) => {
-            const icon = key.split('_')[0];
-
-            if (!accum[icon]) {
-              accum[icon] = icon;
-            }
-
-            return accum;
-          }, {});
-
-          if (Object.keys(matchingPairs).length > 1) {
-            setTimeout(() => {
-              this.setState({
-                ...this.state,
-                selected: {}
-              });
-            }, FLIP_TIMEOUT);
-          } else {
-            setTimeout(() => {
-              this.setState({
-                ...this.state,
-                selected: {},
-                paired: {
-                  ...this.state.paired,
-                  ...this.state.selected
-                }
-              });
-            }, FLIP_TIMEOUT);
-          }
         }
       });
     }
