@@ -5,7 +5,9 @@ import { ICONS } from './conf/index';
 
 const MIN_ELEMENTS = 2;
 const SELECTED_ITEMS_MAX = 2;
-const FLIP_TIMEOUT = 1000;
+const CLEAN_TIME = 700;
+const SUCCESS_TIME = 500;
+const RESET_TIME = 1000;
 
 class App extends Component {
   constructor(props) {
@@ -27,18 +29,6 @@ class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    if (prevState.level < this.state.level) {
-      this.setGameLevel();
-    }
-
-    if (Object.keys(this.state.paired).length === this.state.iconsSortedRandomly.length) {
-      this.setState({
-        level: this.state.level + 1,
-        selected: {},
-        paired: {}
-      });
-    }
-
     if (Object.keys(this.state.selected).length === SELECTED_ITEMS_MAX) {
       const matchingPairs = Object.keys(this.state.selected).reduce((accum, key) => {
         const icon = key.split('_')[0];
@@ -56,7 +46,7 @@ class App extends Component {
             ...this.state,
             selected: {}
           });
-        }, FLIP_TIMEOUT);
+        }, CLEAN_TIME);
       } else {
         setTimeout(() => {
           this.setState({
@@ -67,8 +57,24 @@ class App extends Component {
               ...this.state.selected
             }
           });
-        }, FLIP_TIMEOUT);
+        }, SUCCESS_TIME);
       }
+    }
+
+    if (Object.keys(this.state.paired).length === this.state.iconsSortedRandomly.length) {
+      setTimeout(() => {
+        this.setState({
+          level: this.state.level + 1,
+          paired: {},
+          selected: {}
+        });
+      }, RESET_TIME);
+    }
+
+    if (prevState.level < this.state.level) {
+      setTimeout(() => {
+        this.setGameLevel();
+      }, RESET_TIME);
     }
   }
 
