@@ -1,32 +1,55 @@
-.App {
+.container {
+  max-width: 980px;
+  margin: 0 auto
+}
+
+.row {
+  margin: 20px 0;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));;
+  grid-auto-rows: 100px;
+}
+
+.flip-card {
+  cursor: pointer;
+}
+
+.flip-card.selected .card-body {
+  transform: rotateY(180deg);
+}
+
+.card-body {
+  font-size: 30px;
+  height: 100%;
+  width: 100%;
+  position: relative;
   text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.card-back,
+.card-front {
+  backface-visibility: hidden;
+  height: 100%;
+  line-height: 100px;
+  position: absolute;
+  width: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.card-back {
+  transform: rotateY(180deg);
 }
 
-.App-link {
-  color: #61dafb;
+.points-text {
+  text-align: right;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.flip-card.paired .card-back {
+  background-color: #eee;
 }
